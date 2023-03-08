@@ -3,10 +3,11 @@
 # Project Name
 
 **Author**: Miranda
+
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+The APIs and server used by city quest project
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
@@ -24,12 +25,12 @@
 Time Estimates
 For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
 
-Name of feature: ________________________________
+Name of feature: Basic server set up
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 6hr
 
-Start time: _____
+Start time: 1230
 
-Finish time: _____
+Finish time: 2100 (not completed)
 
-Actual time needed to complete: _____
+Actual time needed to complete: 10+hr
