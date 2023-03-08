@@ -21,12 +21,14 @@ app.get('/', (request, response) => {
   response.send('hello from the server!');
 });
 
+//http://localhost:3001/weather?search=Seattle
 app.get('/weather', (request, response, next) => {
   try {
     let cityRequested = request.query.search;
     let cityObject = data.find(city => city.city_name === cityRequested);
-    let selectedCity = new Forecast(cityObject);
-    response.send(selectedCity);
+    // console.log(cityObject.data);
+    let forcast = cityObject.data.map(item => new Forecast(item));
+    response.send(forcast);
   } catch (error) {
     next(error);
   }
@@ -52,10 +54,18 @@ app.use((error, request, response) => {
 
 class Forecast {
   constructor(weatherObject) {
-    this.data = weatherObject.data;
-    this.city_name = weatherObject.city_name;
-    this.date = weatherObject.data[0].datetime;
-    this.description = weatherObject.data[0].weather.description;
+    // this.data = weatherObject;
+    //this.city_name = weatherObject.city_name;
+    this.date = weatherObject.valid_date;
+    this.description = `Low of ${weatherObject.low_temp}, high of ${weatherObject.max_temp} with ${weatherObject.weather.description.toLowerCase()}`;
+  }
+
+  makeWeatherArr () {
+    let weatherArr = [];
+    for (let i in this.data.data) {
+      weatherArr.push(`Low of ${this.data.data[i].low_temp}, high of ${this.data.data[i].max_temp} with ${this.data.data[i].weather.description.toLowerCase()}`);
+    }
+    return weatherArr;
   }
 }
 
@@ -64,4 +74,3 @@ app.use((error, request, response) => {
 });
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
-
