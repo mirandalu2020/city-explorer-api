@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require('axios');
-
+let cache = require('./cache.js');
 
 class Movie {
   constructor(movieObject) {
@@ -20,13 +20,8 @@ class Movie {
 async function getMovies (request,response, next) {
   let cityMovie = request.query.city;
   console.log(cityMovie);
-  // let params = {
-  //   client_id:process.env.MOVIEDB_API_KEY,
-  //   query: cityMovie
-  // };
 
   //https://api.themoviedb.org/3/search/movie?api_key=8ea253856ba61cbf411c6d7b4a4d3e51&language=en-US&page=1&include_adult=false&query=Seattle
-
   let config = {
     baseURL: 'https://api.themoviedb.org/3/search/movie',
     params: {
@@ -37,10 +32,26 @@ async function getMovies (request,response, next) {
   };
 
   //let movieURL = 'https://api.themoviedb.org/3/search/movie';
+
+  let key = cityMovie + 'Data';
+  let timeToCache = 1000*60*60*24*30;
+  //let timeToTestCache = 1000*20;
+  if (cache[key] && Date.now() - cache[key].timestamp < timeToCache) {
+    console.log('the data is already in the cache');
+    console.log(cache[key]);
+    response.status(200).send(cache[key].data);
+  } else{
+    console.log('It is not in the cash, make request');
+  }
+
   try{
     let movieData = await axios(config);
     let movieDataResults = movieData.data.results.map(item => new Movie(item));
     let filteredMovies = movieDataResults.filter(movie => movie.image_url);
+    cache[key] = {
+      data:movieDataResults,
+      timestamp: Date.now(),
+    };
     response.send(filteredMovies);
   } catch (err){
     Promise.resolve().then(()=> {
