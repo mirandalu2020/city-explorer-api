@@ -1,44 +1,44 @@
 'use strict';
 
+console.log('Buggy server saying hi');
+let cache = require('./cache.js');
 const axios = require('axios');
 
-class Forecast {
-  constructor(weatherObject) {
-    // this.data = weatherObject;
-    //this.city_name = weatherObject.city_name;
-    this.date = weatherObject.valid_date;
-    this.description = `Low of ${weatherObject.low_temp}, high of ${weatherObject.max_temp} with ${weatherObject.weather.description.toLowerCase()}`;
-  }
-}
-
-
-
-async function getWeather (request, response,next) {
-
-  //http://api.weatherbit.io/v2.0/forecast/daily?lat=47.6038321&lon=-122.330062&key=39cf8e2e9ef54799b2ea72f9bcc79192&days=3
-  let cityLat = request.query.lat;
-  let cityLong = request.query.lon;
-
-  let config = {
-    baseURL: 'http://api.weatherbit.io/v2.0/forecast/daily',
-    params: {
-      key:process.env.WEATHERBIT_API_KEY,
-      lat:cityLat,
-      lon:cityLong,
-      days: 5,
-    },
-    method:'get',
-  };
-
-  try{
-    let weatherData = await axios(config);
-    let weatherDataResults = weatherData.data.data.map(item => new Forecast(item));
-    response.send(weatherDataResults);
-  } catch (err){
-    Promise.resolve().then(()=> {
-      throw new Error(err.message);
-    }).catch(next);
-  }
-}
-
 module.exports = getWeather;
+
+async function getWeather(latitude, longitude) {
+  const key = 'weather-' + latitude + longitude;
+  const url = `http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lang=en&lat=${latitude}&lon=${longitude}&days=5`;
+
+  if (cache[key] && (Date.now() - cache[key].timestamp < 50000)) {
+    console.log('Cache hit');
+  }
+
+  else {
+    console.log('Cache miss');
+    cache[key] = {};
+    cache[key].timestamp = Date.now();
+    cache[key].data = await axios.get(url)
+      .then(response => parseWeather(response.data));
+  }
+
+  return cache[key].data;
+}
+
+function parseWeather(weatherData) {
+  try {
+    const weatherSummaries = weatherData.data.map(day => {
+      return new Weather(day);
+    });
+    return Promise.resolve(weatherSummaries);
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
+class Weather {
+  constructor(day) {
+    this.description = day.weather.description;
+    this.date = day.datetime;
+  }
+}
