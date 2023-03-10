@@ -5,8 +5,7 @@ require('dotenv').config();
 const express = require('express');
 
 const cors = require('cors');
-const axios = require('axios');
-// const data = require('./data/weather.json');
+// const axios = require('axios');
 
 // must use express
 const app = express();

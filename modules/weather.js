@@ -29,11 +29,11 @@ async function getWeather (request, response,next) {
     },
     method:'get',
   };
+
   try{
-    let weatherDataResults = await axios(config);
-    let sendWeatherData = weatherDataResults.data.data.map(item => new Forecast(item));
-    console.log(sendWeatherData);
-    // response.send(sendWeatherData);
+    let weatherData = await axios(config);
+    let weatherDataResults = weatherData.data.data.map(item => new Forecast(item));
+    response.send(weatherDataResults);
   } catch (err){
     Promise.resolve().then(()=> {
       throw new Error(err.message);

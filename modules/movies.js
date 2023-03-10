@@ -38,9 +38,10 @@ async function getMovies (request,response, next) {
 
   //let movieURL = 'https://api.themoviedb.org/3/search/movie';
   try{
-    let movieDataResults = await axios(config)
-    let sendMovieData = movieDataResults.data.results.map(item => new Movie(item));
-    response.send(sendMovieData);
+    let movieData = await axios(config);
+    let movieDataResults = movieData.data.results.map(item => new Movie(item));
+    let filteredMovies = movieDataResults.filter(movie => movie.image_url);
+    response.send(filteredMovies);
   } catch (err){
     Promise.resolve().then(()=> {
       throw new Error(err.message);
