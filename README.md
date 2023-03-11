@@ -1,36 +1,27 @@
-# city-explorer-api
-
-# Project Name
+# City Explorer (back-end)
 
 **Author**: Miranda
 
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-The APIs and server used by city quest project
+
+This is the backend code for the City Explorer project. The backend provides an API endpoint to the client which receives request and brokers API's including Weatherbit and MovieDB.
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+
+The backend runs on Node, Dependencies required are dotenv, axios, express, and cors.
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+
+The backend runs on Node. Dependencies required are dotenv, axios, express, and cors. Cache wil be first checked when a client requests is made from the backend, if nothing is stored in cache or it's expired, then the API call will be made.
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
+03-06-2023 8:11pm - Application renders a name, latitute and longitude, and a map upon client's request for a city.
+03-09-2023 8:30pm - Application fully rendered locally, currengly under testing for remote server. Style added
+03-11-2023 10:30pm - Cache added
 
 ## Credit and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
-Time Estimates
-For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
 
-Name of feature: Basic server set up
-
-Estimate of time needed to complete: 6hr
-
-Start time: 1230
-
-Finish time: 2100 (not completed)
-
-Actual time needed to complete: 10+hr
+Sheyna, Justin Hammerly. Daniel Yoon, Kirill Lesnykh

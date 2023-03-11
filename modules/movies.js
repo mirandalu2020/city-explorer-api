@@ -54,9 +54,12 @@ async function getMovies (request,response, next) {
     };
     response.send(filteredMovies);
   } catch (err){
-    Promise.resolve().then(()=> {
-      throw new Error(err.message);
-    }).catch(next);
+    Promise
+      .resolve()
+      .then(()=> {
+        throw new Error(err.message);
+      })
+      .catch(next);
   }
 
 
